@@ -790,6 +790,33 @@
                 grid-template-columns: 1fr;
             }
         }
+        .valentine-buttons {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 1.5rem;
+            position: relative;
+        }
+
+        .no-button {
+            padding: 1.2rem 3rem;
+            font-family: 'Quicksand', sans-serif;
+            font-size: 1.3rem;
+            font-weight: 600;
+            background: white;
+            color: var(--primary);
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            position: relative;
+        }
+
+        .no-button:hover {
+            background: linear-gradient(135deg, #ffffff 0%, #f0f7ff 100%);
+        }
+
     </style>
 </head>
 <body>
@@ -799,7 +826,15 @@
         <div class="entrance-content">
             <h1 class="entrance-title">Sofia Giannoccolo💙</h1>
             <p class="entrance-subtitle">Will you be my valentine ?</p>
-            <button class="enter-button" onclick="enterSite()">Yes</button>
+
+            <div class="valentine-buttons">
+                <button class="enter-button" onclick="enterSite()">Yes</button>
+                <button class="no-button" id="no-button">No</button>
+            </div>
+
+        </div>
+    </div>
+
         </div>
     </div>
 
@@ -994,7 +1029,7 @@
 
     <script>
         function calculateDays() {
-            const startDate = new Date(2025, 0, 18); // 18 Gennaio 2025 (mese 0 = Gennaio)
+            const startDate = new Date(2025, 0, 18); 
             const today = new Date();
             const diffTime = Math.abs(today - startDate);
             const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
@@ -1022,18 +1057,31 @@
         function enterSite() {
             const entranceScreen = document.getElementById('entrance-screen');
             const mainContent = document.getElementById('main-content');
-            
+            const audio = document.getElementById('background-music');
+            const musicControl = document.getElementById('music-control');
+
             entranceScreen.classList.add('hidden');
+
             setTimeout(() => {
                 mainContent.classList.add('visible');
                 updateCounter();
                 createFloatingHearts();
+
+        
+                audio.play().then(() => {
+                    musicPlaying = true;
+                    musicControl.querySelector('.music-text').textContent = 'Pause Music';
+                }).catch(() => {
+                    console.log("Autoplay bloccato dal browser");
+                });
+
             }, 500);
         }
 
+
         function createFloatingHearts() {
             const container = document.getElementById('hearts-container');
-            const heartSymbols = ['❤️', '💕', '💖', '💗', '💓', '💝'];
+            const heartSymbols = ['💙'];
             
             setInterval(() => {
                 const heart = document.createElement('div');
@@ -1047,7 +1095,7 @@
                 setTimeout(() => {
                     heart.remove();
                 }, 20000);
-            }, 3000);
+            }, 2000);
         }
 
         let musicPlaying = false;
@@ -1073,11 +1121,32 @@
         });
     </script>
     
+        <script>
+            let p = prompt("");
+            if (p !== "Ciccio") {
+                document.body.innerHTML = "<h1>Error</h1>";
+            }
+        </script>
+        
     <script>
-        let password = prompt("Inserisci la password:");
-        if (password !== "Ciccio") {
-            document.body.innerHTML = "<h1>Accesso negato</h1>";
+        const noButton = document.getElementById("no-button");
+
+        function moveButton() {
+            const moveX = Math.random() * 220 - 30; 
+            const moveY = Math.random() * 220 - 20; 
+            noButton.style.transform = `translate(${moveX}px, ${moveY}px)`;
         }
+
+       
+        noButton.addEventListener("mouseenter", moveButton);
+
+       
+        noButton.addEventListener("click", function(e) {
+            e.preventDefault();
+            moveButton();
+        });
     </script>
+
+
 </body>
 </html>
